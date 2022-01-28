@@ -8,6 +8,11 @@
 #include <map>
 #include <any>
 
+#define Int int()
+#define Double double()
+#define Bool bool()
+#define String std::string()
+
 // argc from my full name: Antonio Raúl Guijarro Contreras
 namespace argc {
 
