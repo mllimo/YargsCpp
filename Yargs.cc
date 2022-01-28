@@ -2,51 +2,89 @@
 
 namespace argc {
 
-Yargs::Yargs() : argc_(0), argv_(nullptr) {}
+Yargs::Yargs() {}
 
-Yargs::Yargs(int argc, char* argv[]) : argc_(argc), argv_(argv) {}
+
+Yargs::Yargs(int argc, char* argv[]) { argv_ = ParseArgv(argc, argv); }
+
 
 Yargs& Yargs::Parse(int argc, char* argv[]) {
+  argv_ = ParseArgv(argc, argv);
+  return Parse();
+}
+
+// Refac
+Yargs& Yargs::Parse() {
   std::any value;
   std::string cleaned;
-  for (size_t i = 0; i < argc; ++i) {
-    cleaned = Clean(argv[i]);
-    if (HaveValue(argv[i])) {
-      value = GetValue(argv[i]);
+  
+  for (size_t i = 0; i < argv_.size(); ++i) {
+    cleaned = Clean(argv_[i]);
+    if (array_keys_.find(cleaned) != array_keys_.end()) {
+      std::vector<std::string> values;
+      for (int j = i + 1; j < argv_.size(); ++j) {
+        if (std::regex_match(argv_[j], std::regex("--|-"))) break;
+        values.push_back(argv_[j]);
+      }
+      values_[cleaned] = values;
+    } else if (bool_keys_.find(cleaned) != bool_keys_.end()) {
+      values_[cleaned] = true; 
+    } else if (HaveValue(argv_[i])) {
+      values_[cleaned] = GetValue(argv_[i]); 
+    } else {
+      values_[cleaned];
     }
-    values_[cleaned] = value;
+ 
   }
+
   return *this;
 }
 
-Yargs& Yargs::Parse() { return Parse(argc_, argv_); }
 
 int Yargs::operator()(const std::string& key, int t) { 
   return std::any_cast<int>(values_[key]);
 }
 
+
 bool Yargs::operator()(const std::string& key, bool t) {
   return std::any_cast<bool>(values_[key]);
 }
 
+
 double Yargs::operator()(const std::string& key, double t) {
   return std::any_cast<double>(values_[key]);
 }
+
 
 std::string Yargs::operator()(const std::string& key,
                               const std::string& t) {
   return std::any_cast<std::string>(values_[key]);
 }
 
+
+std::vector<std::string> Yargs::operator()(const std::string& key,
+                                           const std::vector<std::string>& t) {
+  return std::any_cast<std::vector<std::string>>(values_[key]);
+}
+
+
 Yargs& Yargs::Array(const std::string& key) { 
   array_keys_.insert(key);
   return *this;
 }
 
+
+std::vector<std::string> Yargs::ParseArgv(int argc, char** argv) {
+  std::vector<std::string> arguments;
+  arguments.insert(arguments.end(), argv, argv + argc);
+  return arguments;
+}
+
 std::string Yargs::Clean(const std::string& argument) {
-  auto string = std::regex_replace(argument, std::regex("--"), "");
+  auto string = std::regex_replace(argument, std::regex("--|-"), "");
   return std::regex_replace(string, std::regex("=.*$"), "");
 }
+
 
 bool Yargs::HaveValue(const std::string& argument) {
   for (char c : argument) {
@@ -54,6 +92,7 @@ bool Yargs::HaveValue(const std::string& argument) {
   }
   return false;
 }
+
 
 std::any Yargs::GetValue(const std::string& argument) {
   std::string value_str;

@@ -13,6 +13,7 @@
 #define Double double()
 #define Bool bool()
 #define String std::string()
+#define ArrayString std::vector<std::string>()
 
 // argc from my full name: Antonio Raúl Guijarro Contreras
 namespace argc {
@@ -69,6 +70,14 @@ class Yargs {
   std::string operator()(const std::string& key, const std::string& t);
 
   /**
+      @brief  Return the value as a std::vector<string>
+      @param  key 
+      @param  t Type
+      @retval Value
+  **/
+  std::vector<std::string> operator()(const std::string& key, const std::vector<std::string>& t);
+
+  /**
       @brief  Tell the parser to interpret key as an array
       @param  key 
       @retval Reference to the class to concatenate function calls
@@ -77,12 +86,12 @@ class Yargs {
 
 
  private:
+  std::vector<std::string> ParseArgv(int argc, char** argv);
   std::string Clean(const std::string& argument);
   bool HaveValue(const std::string& argument);
   std::any GetValue(const std::string& argument);
 
-  int argc_;
-  char** argv_;
+  std::vector<std::string> argv_;
   std::set<std::string> bool_keys_;
   std::set<std::string> array_keys_;
   std::map<std::string, std::any> values_;
