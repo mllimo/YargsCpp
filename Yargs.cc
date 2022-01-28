@@ -2,33 +2,45 @@
 
 namespace argc {
 
-Yargs::Yargs(int argc, char* argv[]) {
+Yargs::Yargs() : argc_(0), argv_(nullptr) {}
+
+Yargs::Yargs(int argc, char* argv[]) : argc_(argc), argv_(argv) {}
+
+Yargs& Yargs::Parse(int argc, char* argv[]) {
   std::any value;
   std::string cleaned;
-  for (size_t i = 0; i < argc; ++i) { 
+  for (size_t i = 0; i < argc; ++i) {
     cleaned = Clean(argv[i]);
     if (HaveValue(argv[i])) {
       value = GetValue(argv[i]);
     }
-    argv_[cleaned] = value;
+    values_[cleaned] = value;
   }
+  return *this;
 }
 
-int Yargs::operator()(const std::string& argument, int t) { 
-  return std::any_cast<int>(argv_[argument]);
+Yargs& Yargs::Parse() { return Parse(argc_, argv_); }
+
+int Yargs::operator()(const std::string& key, int t) { 
+  return std::any_cast<int>(values_[key]);
 }
 
-bool Yargs::operator()(const std::string& argument, bool t) {
-  return std::any_cast<bool>(argv_[argument]);
+bool Yargs::operator()(const std::string& key, bool t) {
+  return std::any_cast<bool>(values_[key]);
 }
 
-double Yargs::operator()(const std::string& argument, double t) {
-  return std::any_cast<double>(argv_[argument]);
+double Yargs::operator()(const std::string& key, double t) {
+  return std::any_cast<double>(values_[key]);
 }
 
-std::string Yargs::operator()(const std::string& argument,
+std::string Yargs::operator()(const std::string& key,
                               const std::string& t) {
-  return std::any_cast<std::string>(argv_[argument]);
+  return std::any_cast<std::string>(values_[key]);
+}
+
+Yargs& Yargs::Array(const std::string& key) { 
+  array_keys_.insert(key);
+  return *this;
 }
 
 std::string Yargs::Clean(const std::string& argument) {

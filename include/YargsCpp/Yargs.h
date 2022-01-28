@@ -6,6 +6,7 @@
 #include <sstream>
 #include <regex>
 #include <map>
+#include <set>
 #include <any>
 
 #define Int int()
@@ -20,12 +21,59 @@ enum Type {INT, DOUBLE, BOOL, STRING, VOID};
 
 class Yargs {
  public:
-  Yargs(int argc, char* argv[]);
 
-  int operator()(const std::string& argument, int t);
-  bool operator()(const std::string& argument, bool t);
-  double operator()(const std::string& argument, double t);
-  std::string operator()(const std::string& argument, const std::string& t);
+  Yargs();
+
+  /**
+      @brief Yargs object constructor
+      @param argc Number of arguments
+      @param argv Arguments value
+  **/
+  Yargs(int argc, char** argv);
+
+
+  Yargs& Parse();
+
+  Yargs& Parse(int argc, char** argv);
+
+  /**
+      @brief  Return the value as a int
+      @param  key 
+      @param  t Type  
+      @retval Value
+  **/
+  int operator()(const std::string& key, int t);
+
+   /**
+      @brief  Return the value as a bool
+      @param  key 
+      @param  t Type  
+      @retval Value
+  **/
+  bool operator()(const std::string& key, bool t);
+
+  /**
+      @brief  Return the value as a double
+      @param  key
+      @param  t Type
+      @retval Value 
+  **/
+  double operator()(const std::string& key, double t);
+
+  /**
+      @brief  Return the value as a std::string
+      @param  key
+      @param  t Type
+      @retval Value
+  **/
+  std::string operator()(const std::string& key, const std::string& t);
+
+  /**
+      @brief  Tell the parser to interpret key as an array
+      @param  key 
+      @retval Reference to the class to concatenate function calls
+  **/
+  Yargs& Array(const std::string& key);
 
 
  private:
@@ -33,6 +81,10 @@ class Yargs {
   bool HaveValue(const std::string& argument);
   std::any GetValue(const std::string& argument);
 
-  std::map<std::string, std::any> argv_;
+  int argc_;
+  char** argv_;
+  std::set<std::string> bool_keys_;
+  std::set<std::string> array_keys_;
+  std::map<std::string, std::any> values_;
 };
 }
