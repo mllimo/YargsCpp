@@ -23,8 +23,5 @@
     <ClCompile Include="Yargs.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="test.cc">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
