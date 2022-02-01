@@ -31,10 +31,7 @@ Yargs& Yargs::Parse() {
       values_[cleaned] = true; 
     } else if (HaveValue(argv_[i])) {
       values_[cleaned] = GetValue(argv_[i]); 
-    } else {
-      values_[cleaned];
-    }
- 
+    }  
   }
 
   return *this;
@@ -47,6 +44,7 @@ int Yargs::operator()(const std::string& key, int t) {
 
 
 bool Yargs::operator()(const std::string& key, bool t) {
+  if (values_.find(key) == values_.end()) return false;
   return std::any_cast<bool>(values_[key]);
 }
 
@@ -73,6 +71,11 @@ Yargs& Yargs::Array(const std::string& key) {
   return *this;
 }
 
+
+Yargs& Yargs::Boolean(const std::string& key) { 
+  bool_keys_.insert(key);
+  return *this;
+}
 
 std::vector<std::string> Yargs::ParseArgv(int argc, char** argv) {
   std::vector<std::string> arguments;

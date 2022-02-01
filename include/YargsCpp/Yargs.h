@@ -83,6 +83,13 @@ class Yargs {
       @retval Reference to the class to concatenate function calls
   **/
   Yargs& Array(const std::string& key);
+  
+  /**
+      @brief  Tell the parser to interpret key as an array
+      @param  key 
+      @retval Reference to the class to concatenate function calls    
+  **/
+  Yargs& Boolean(const std::string& key);
 
 
  private:

@@ -40,6 +40,14 @@ TEST(YargsCpp, ArrayArguments) {
   }
 }
 
+TEST(YargsCpp, BoolArguments) {
+  int argc = 2;
+  char* argv[] = {"mi.exe", "--debug"};
+  argc::Yargs yargs(argc, argv);
+  yargs.Boolean("debug").Parse();
+  EXPECT_TRUE(yargs("debug", Bool));
+}
+
 TEST(YargsCpp, ArgumentsMixed) {
   int argc = 5;
   char* argv[] = {"mi.exe", "--names", "Antonio", "Raul", "--age=22"};
