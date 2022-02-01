@@ -23,7 +23,7 @@ Yargs& Yargs::Parse() {
     if (array_keys_.find(cleaned) != array_keys_.end()) {
       std::vector<std::string> values;
       for (int j = i + 1; j < argv_.size(); ++j) {
-        if (std::regex_match(argv_[j], std::regex("--|-"))) break;
+        if (std::regex_search(argv_[j], std::regex("--|-"))) break;
         values.push_back(argv_[j]);
       }
       values_[cleaned] = values;
