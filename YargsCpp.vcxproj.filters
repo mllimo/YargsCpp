@@ -18,9 +18,15 @@
     <ClInclude Include="include\YargsCpp\Yargs.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="include\YargsCpp\Alias.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Yargs.cc">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Alias.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

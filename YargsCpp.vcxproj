@@ -147,9 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\YargsCpp\Alias.h" />
     <ClInclude Include="include\YargsCpp\Yargs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Alias.cc" />
     <ClCompile Include="Yargs.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
