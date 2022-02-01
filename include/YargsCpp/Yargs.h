@@ -9,6 +9,8 @@
 #include <set>
 #include <any>
 
+#include <YargsCpp/Alias.h>
+
 #define Int int()
 #define Double double()
 #define Bool bool()
@@ -99,8 +101,8 @@ class Yargs {
   std::any GetValue(const std::string& argument);
 
   std::vector<std::string> argv_;
-  std::set<std::string> bool_keys_;
-  std::set<std::string> array_keys_;
-  std::map<std::string, std::any> values_;
+  std::set<Alias> bool_keys_;
+  std::set<Alias> array_keys_;
+  std::map<Alias, std::any> values_;
 };
 }
