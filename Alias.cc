@@ -8,7 +8,13 @@ Alias::Alias(const std::forward_list<std::string> names) {
   names_.insert(names.begin(), names.end());
 }
 
+Alias::Alias(const Alias& alias) { names_ = alias.names_; }
+
 void Alias::Add(const std::string& name) { names_.insert(name); }
+
+void Alias::Add(const Alias& names) {
+  names_.insert(names.names_.begin(), names.names_.end());
+}
 
 bool operator<(const Alias& rhs, const Alias& lhs) { 
   for (auto& name : rhs.names_) {

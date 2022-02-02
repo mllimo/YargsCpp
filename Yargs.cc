@@ -77,11 +77,46 @@ Yargs& Yargs::Boolean(const std::string& key) {
   return *this;
 }
 
+// Optimizar
+Yargs& Yargs::Alias(const std::string& key, const argc::Alias& alias) {
+  // Change bool set
+  auto bool_it = bool_keys_.find(key);
+  if (bool_it != bool_keys_.end()) {
+    argc::Alias prevs = *bool_it;
+    bool_keys_.erase(bool_it);
+    prevs.Add(alias);
+    bool_keys_.insert(prevs);
+  }
+
+  // Change array set
+  auto array_it = array_keys_.find(key);
+  if (array_it != array_keys_.end()) {
+    argc::Alias prevs = *array_it;
+    array_keys_.erase(bool_it);
+    prevs.Add(alias);
+    array_keys_.insert(prevs);
+  }
+  
+  // Cambiar map
+  auto map_it = values_.find(key);
+  if (map_it != values_.end()) {
+    argc::Alias prevs = map_it->first;
+    std::any value = map_it->second;
+    values_.erase(map_it);
+    prevs.Add(alias);
+    values_.insert(std::make_pair(prevs, value));
+  }
+
+  return *this;
+}
+
+
 std::vector<std::string> Yargs::ParseArgv(int argc, char** argv) {
   std::vector<std::string> arguments;
   arguments.insert(arguments.end(), argv, argv + argc);
   return arguments;
 }
+
 
 std::string Yargs::Clean(const std::string& argument) {
   auto string = std::regex_replace(argument, std::regex("--|-"), "");

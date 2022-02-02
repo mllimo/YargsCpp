@@ -93,6 +93,8 @@ class Yargs {
   **/
   Yargs& Boolean(const std::string& key);
 
+  Yargs& Alias(const std::string& key, const argc::Alias& alias);
+
 
  private:
   std::vector<std::string> ParseArgv(int argc, char** argv);
@@ -101,8 +103,8 @@ class Yargs {
   std::any GetValue(const std::string& argument);
 
   std::vector<std::string> argv_;
-  std::set<Alias> bool_keys_;
-  std::set<Alias> array_keys_;
-  std::map<Alias, std::any> values_;
+  std::set<argc::Alias> bool_keys_;
+  std::set<argc::Alias> array_keys_;
+  std::map<argc::Alias, std::any> values_;
 };
 }
