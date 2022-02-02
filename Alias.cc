@@ -10,12 +10,16 @@ Alias::Alias(const std::forward_list<std::string> names) {
 
 void Alias::Add(const std::string& name) { names_.insert(name); }
 
-bool operator<(const Alias& rhs, const Alias& lhs) {
+bool operator<(const Alias& rhs, const Alias& lhs) { 
+  for (auto& name : rhs.names_) {
+    if (lhs.names_.find(name) != lhs.names_.end()) return false;
+  }
   return rhs.names_ < lhs.names_;
 }
 
 bool operator==(const std::string& rhs, const Alias& lhs) {
   return lhs.names_.find(rhs) != lhs.names_.end();
 }
+
 
 }  // namespace argc
