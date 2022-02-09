@@ -17,17 +17,18 @@ Yargs& Yargs::Parse(int argc, char* argv[]) {
 Yargs& Yargs::Parse() {
   std::any value;
   std::string cleaned;
-  
+
   for (size_t i = 0; i < argv_.size(); ++i) {
     cleaned = Clean(argv_[i]);
-    if (array_keys_.find(cleaned) != array_keys_.end()) {
+    argc::Alias alias(GetAllAlias(cleaned));
+    if (array_keys_.find(alias) != array_keys_.end()) {
       std::vector<std::string> values;
-      for (int j = i + 1; j < argv_.size(); ++j) {
+      for (size_t j = i + 1; j < argv_.size(); ++j) {
         if (std::regex_search(argv_[j], std::regex("--|-"))) break;
         values.push_back(argv_[j]);
       }
       values_[cleaned] = values;
-    } else if (bool_keys_.find(cleaned) != bool_keys_.end()) {
+    } else if (bool_keys_.find(alias) != bool_keys_.end()) {
       values_[cleaned] = true; 
     } else if (HaveValue(argv_[i])) {
       values_[cleaned] = GetValue(argv_[i]); 
@@ -79,32 +80,13 @@ Yargs& Yargs::Boolean(const std::string& key) {
 
 // Optimizar
 Yargs& Yargs::Alias(const std::string& key, const argc::Alias& alias) {
-  // Change bool set
-  auto bool_it = bool_keys_.find(key);
-  if (bool_it != bool_keys_.end()) {
-    argc::Alias prevs = *bool_it;
-    bool_keys_.erase(bool_it);
-    prevs.Add(alias);
-    bool_keys_.insert(prevs);
-  }
-
-  // Change array set
-  auto array_it = array_keys_.find(key);
-  if (array_it != array_keys_.end()) {
-    argc::Alias prevs = *array_it;
-    array_keys_.erase(bool_it);
-    prevs.Add(alias);
-    array_keys_.insert(prevs);
-  }
-  
-  // Cambiar map
-  auto map_it = values_.find(key);
-  if (map_it != values_.end()) {
-    argc::Alias prevs = map_it->first;
-    std::any value = map_it->second;
-    values_.erase(map_it);
-    prevs.Add(alias);
-    values_.insert(std::make_pair(prevs, value));
+  auto it = std::find(alias_.begin(), alias_.end(), key);
+  if (it != alias_.end()) {
+    it->Add(alias);
+  } else {
+    argc::Alias to_add(key);
+    to_add.Add(alias);
+    alias_.push_back(to_add);
   }
 
   return *this;
@@ -169,5 +151,12 @@ std::any Yargs::GetValue(const std::string& argument) {
 
   return value;
 }
+
+argc::Alias Yargs::GetAllAlias(const argc::Alias& alias) { 
+  auto it = std::find(alias_.begin(), alias_.end(), alias);
+  if (it != alias_.end()) return *it;
+  return alias;
+}
+
 
 }  // namespace argc

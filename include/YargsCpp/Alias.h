@@ -16,6 +16,7 @@ class Alias {
   void Add(const Alias& name);
 
   friend bool operator<(const Alias& rhs, const Alias& lhs);
+  friend bool operator==(const Alias& rhs, const Alias& lhs);
   friend bool operator==(const std::string& rhs, const Alias& lhs);
 
  private:

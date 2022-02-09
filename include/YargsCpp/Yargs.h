@@ -93,6 +93,12 @@ class Yargs {
   **/
   Yargs& Boolean(const std::string& key);
 
+  /**
+      @brief  Add new Alias to the determinated key
+      @param  key
+      @param  alias 
+      @retval       
+  **/
   Yargs& Alias(const std::string& key, const argc::Alias& alias);
 
 
@@ -101,10 +107,13 @@ class Yargs {
   std::string Clean(const std::string& argument);
   bool HaveValue(const std::string& argument);
   std::any GetValue(const std::string& argument);
+  argc::Alias GetAllAlias(const argc::Alias& alias);
+  
 
   std::vector<std::string> argv_;
   std::set<argc::Alias> bool_keys_;
   std::set<argc::Alias> array_keys_;
+  std::vector<argc::Alias> alias_;
   std::map<argc::Alias, std::any> values_;
 };
 }

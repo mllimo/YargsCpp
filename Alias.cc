@@ -23,6 +23,13 @@ bool operator<(const Alias& rhs, const Alias& lhs) {
   return rhs.names_ < lhs.names_;
 }
 
+bool operator==(const Alias& rhs, const Alias& lhs) {
+  for (auto& name : rhs.names_) {
+    if (lhs.names_.find(name) != lhs.names_.end()) return true;
+  }
+  return false;
+}
+
 bool operator==(const std::string& rhs, const Alias& lhs) {
   return lhs.names_.find(rhs) != lhs.names_.end();
 }
