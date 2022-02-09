@@ -23,10 +23,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Yargs.cc">
+    <ClCompile Include="src\Yargs.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Alias.cc">
+    <ClCompile Include="src\Alias.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

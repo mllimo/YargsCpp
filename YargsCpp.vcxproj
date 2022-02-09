@@ -151,8 +151,8 @@
     <ClInclude Include="include\YargsCpp\Yargs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Alias.cc" />
-    <ClCompile Include="Yargs.cc" />
+    <ClCompile Include="src\Alias.cc" />
+    <ClCompile Include="src\Yargs.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
